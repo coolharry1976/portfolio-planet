@@ -2,6 +2,7 @@ import React, { useEffect, useState, lazy, Suspense } from "react";
 import Earth from "./components/Earth";
 import AboutMe from "./components/AboutMe";
 import Contact from "./components/Contact";
+import ThemeToggle from "./components/ThemeToggle";
 
 const Projects = lazy(() => import("./components/Projects"));
 
@@ -40,10 +41,12 @@ export default function App() {
       <div className="h-screen relative">
         <Earth />
         <header className="absolute top-0 left-0 w-full p-4 flex items-center justify-center">
-          <nav className="flex gap-2 bg-black/30 backdrop-blur-sm px-3 py-2 rounded-full border border-white/10">
+          <nav className="flex items-center gap-2 bg-black/30 backdrop-blur-sm px-3 py-2 rounded-full border border-white/10">
             {navBtn("about","About")}
             {navBtn("projects","Projects")}
             {navBtn("contact","Contact")}
+            <div className="mx-1 opacity-60">|</div>
+            <ThemeToggle />
           </nav>
         </header>
         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-center text-white/80 text-sm">
