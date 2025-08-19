@@ -33,10 +33,10 @@ export default function App() {
     return () => obs.disconnect();
   }, []);
 
-  // Sticky header trigger (after passing ~60% of hero height)
+  // Sticky header trigger (after ~60% of hero)
   useEffect(() => {
     const onScroll = () => {
-      const threshold = window.innerHeight * 0.6;
+      const threshold = Math.max(320, window.innerHeight * 0.6);
       setStuck(window.scrollY > threshold);
     };
     onScroll();
@@ -52,7 +52,7 @@ export default function App() {
   const navBtn = (id, label) => (
     <button
       onClick={() => scrollTo(`#${id}`)}
-      className={`px-3 py-1 rounded-full transition ${
+      className={`px-3 py-2 md:py-1 rounded-full text-sm md:text-base transition ${
         active === id
           ? "bg-white text-black"
           : "text-white/85 hover:text-white bg-white/10 hover:bg-white/20"
@@ -62,34 +62,35 @@ export default function App() {
     </button>
   );
 
+  // Brand chip (mobile-conscious)
   const BrandChip = () => (
     <a
       href="#about"
-      className="group inline-flex items-center gap-3 bg-black/35 backdrop-blur-sm border border-white/10 rounded-full pl-3 pr-4 py-2"
+      className="group inline-flex items-center gap-2 md:gap-3 bg-black/35 backdrop-blur-sm border border-white/10 rounded-full pl-2.5 md:pl-3 pr-3 md:pr-4 py-2"
       aria-label="Go to About section"
     >
-      <div className="flex items-baseline gap-2">
-        <span
-          className="text-white text-sm md:text-base leading-none"
-          style={{ fontFamily: "'Space Grotesk', system-ui, -apple-system, Segoe UI, Roboto, sans-serif" }}
-        >
-          <span className="font-bold tracking-wide">Desmond Adebowale</span>
-          <span className="hidden md:inline text-white/60"> · Software Engineer</span>
-        </span>
-        <span className="text-[10px] md:text-xs px-2 py-0.5 rounded-full border border-white/15 text-white/80 bg-white/5 uppercase tracking-wider">
-          Portfolio
-        </span>
-      </div>
+      <span
+        className="text-white leading-none text-sm md:text-base"
+        style={{ fontFamily: "'Space Grotesk', system-ui, -apple-system, Segoe UI, Roboto, sans-serif" }}
+      >
+        <span className="font-bold tracking-wide">Desmond Harry Adebowale</span>
+        <span className="hidden sm:inline text-white/70"> · Software Engineer</span>
+      </span>
+      <span className="text-[10px] md:text-xs px-2 py-0.5 rounded-full border border-white/15 text-white/85 bg-white/5 uppercase tracking-wider">
+        Portfolio
+      </span>
     </a>
   );
 
   const HeaderNav = () => (
-    <nav className="flex items-center gap-2 bg-black/30 backdrop-blur-sm px-3 py-2 rounded-full border border-white/10">
+    <nav className="flex items-center gap-1.5 md:gap-2 bg-black/30 backdrop-blur-sm px-2.5 md:px-3 py-1.5 md:py-2 rounded-full border border-white/10">
       {navBtn("about", "About")}
       {navBtn("projects", "Projects")}
       {navBtn("contact", "Contact")}
-      <div className="mx-1 opacity-60">|</div>
-      <ThemeToggle theme={theme} setTheme={setTheme} />
+      <div className="hidden md:block mx-1 opacity-60">|</div>
+      <div className="ml-0.5 md:ml-0">
+        <ThemeToggle theme={theme} setTheme={setTheme} />
+      </div>
     </nav>
   );
 
@@ -103,17 +104,17 @@ export default function App() {
 
         {/* Top header over hero: brand + nav */}
         <header className="absolute top-0 left-0 w-full z-20">
-          <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+          <div className="max-w-6xl mx-auto px-3 md:px-4 py-2.5 md:py-3 flex items-center justify-between">
             <BrandChip />
             <HeaderNav />
           </div>
         </header>
 
-        {/* Bigger, clearer scroll cue */}
+        {/* Bigger, clearer scroll cue (larger tap target on mobile) */}
         <button
           onClick={() => scrollTo("#about")}
           className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20
-                     flex items-center gap-2 px-4 py-2 rounded-full
+                     flex items-center gap-2 px-5 py-3 rounded-full
                      bg-white/10 hover:bg-white/20 border border-white/20
                      text-white/90 hover:text-white text-base md:text-lg transition"
           aria-label="Scroll down"
@@ -130,8 +131,8 @@ export default function App() {
         }`}
         aria-hidden={!stuck}
       >
-        <div className="max-w-6xl mx-auto px-4 py-2">
-          <div className="flex items-center justify-between bg-black/55 backdrop-blur-md border border-white/10 rounded-full px-3 py-2">
+        <div className="max-w-6xl mx-auto px-3 md:px-4 py-2">
+          <div className="flex items-center justify-between bg-black/55 backdrop-blur-md border border-white/10 rounded-full px-2.5 md:px-3 py-1.5 md:py-2">
             <BrandChip />
             <HeaderNav />
           </div>

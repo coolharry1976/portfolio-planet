@@ -13,10 +13,12 @@ function EarthSphere() {
     `${BASE}textures/earth_bump.jpg`,
     `${BASE}textures/earth_specular.jpg`,
   ]);
+  // Lower segment detail on very small screens for perf
+  const small = typeof window !== "undefined" && window.innerWidth < 380;
   useFrame((_, d) => { if (ref.current) ref.current.rotation.y += d * 0.06; });
   return (
     <mesh ref={ref}>
-      <sphereGeometry args={[2, 64, 64]} />
+      <sphereGeometry args={[2, small ? 48 : 64, small ? 48 : 64]} />
       <meshPhongMaterial
         map={colorMap}
         bumpMap={bumpMap}
@@ -37,7 +39,7 @@ function Atmosphere() {
       <meshBasicMaterial
         color={"#7cc3ff"}
         transparent
-        opacity={0.16}
+        opacity={0.18} // slightly higher for legibility on phones
         blending={THREE.AdditiveBlending}
         side={THREE.BackSide}
       />
@@ -84,7 +86,7 @@ function SkillOrb({ label, url, radius=3, speed=0.5, offset=0, yAmp=0.4, color="
         <meshStandardMaterial color={color} metalness={0.2} roughness={0.35} />
       </mesh>
       <Billboard position={[0, 0.55, 0]}>
-        <Text fontSize={0.28} color="white" anchorX="center" anchorY="middle" outlineWidth={0.005} outlineColor="black">
+        <Text fontSize={0.26} color="white" anchorX="center" anchorY="middle" outlineWidth={0.005} outlineColor="black">
           {label}
         </Text>
       </Billboard>
@@ -101,15 +103,15 @@ export default function Earth() {
   };
 
   const skills = [
-    { label: "Python",     color: "#22c55e", radius: 3.1, speed: 0.50, offset: 0.0 },
-    { label: "Java",       color: "#f59e0b", radius: 3.3, speed: 0.62, offset: 1.2 },
-    { label: "React",      color: "#06b6d4", radius: 3.0, speed: 0.58, offset: 2.4, url: projectLinks.React },
-    { label: "JavaScript", color: "#eab308", radius: 3.2, speed: 0.55, offset: 3.6, url: projectLinks.JavaScript },
-    { label: "SQL",        color: "#a78bfa", radius: 3.4, speed: 0.44, offset: 4.8, url: projectLinks.SQL },
-    { label: "AWS",        color: "#f97316", radius: 3.0, speed: 0.70, offset: 6.0, url: projectLinks.AWS },
+    { label: "Python",     color: "#22c55e", radius: 3.05, speed: 0.50, offset: 0.0 },
+    { label: "Java",       color: "#f59e0b", radius: 3.2,  speed: 0.60, offset: 1.2 },
+    { label: "React",      color: "#06b6d4", radius: 2.9,  speed: 0.56, offset: 2.4, url: projectLinks.React },
+    { label: "JavaScript", color: "#eab308", radius: 3.1,  speed: 0.54, offset: 3.6, url: projectLinks.JavaScript },
+    { label: "SQL",        color: "#a78bfa", radius: 3.2,  speed: 0.44, offset: 4.8, url: projectLinks.SQL },
+    { label: "AWS",        color: "#f97316", radius: 2.9,  speed: 0.68, offset: 6.0, url: projectLinks.AWS },
   ];
 
-  /* brighter lighting + mobile perf caps */
+  // brighter + mobile perf
   const Sun = () => {
     const light = useRef();
     useFrame(({ clock }) => {
@@ -119,7 +121,7 @@ export default function Earth() {
     });
     return <directionalLight ref={light} intensity={1.9} castShadow />;
   };
-  const Fill = () => <pointLight position={[-6, -2, -3]} intensity={0.4} color={"#a6d0ff"} />;
+  const Fill = () => <pointLight position={[-6, -2, -3]} intensity={0.42} color={"#a6d0ff"} />;
 
   const isSmall = typeof window !== "undefined" && window.innerWidth < 640;
 
@@ -128,28 +130,30 @@ export default function Earth() {
       camera={{ position: [0, 0, 6] }}
       className="cursor-grab"
       gl={{ toneMapping: THREE.ACESFilmicToneMapping, antialias: true, powerPreference: "high-performance" }}
-      dpr={[1, 1.75]}
-      onCreated={({ gl }) => { gl.toneMappingExposure = 1.45; }}
+      dpr={[1, 1.6]} // slightly lower cap on phones for smoother FPS
+      onCreated={({ gl }) => { gl.toneMappingExposure = 1.48; }} // a hair brighter
     >
-      <ambientLight intensity={0.65} />
-      <hemisphereLight skyColor={"#9ad1ff"} groundColor={"#222"} intensity={0.4} />
+      <ambientLight intensity={0.68} />
+      <hemisphereLight skyColor={"#9ad1ff"} groundColor={"#222"} intensity={0.42} />
       <Sun />
       <Fill />
-      <Stars radius={100} depth={50} count={isSmall ? 800 : 5000} factor={3.5} />
+      <Stars radius={100} depth={50} count={isSmall ? 700 : 4500} factor={isSmall ? 3 : 3.6} />
 
       <EarthSphere />
       <Clouds />
       <Atmosphere />
 
-      {/* ---- UPDATED: concise, keyword-rich title instead of full name ---- */}
+      {/* Concise recruiter-friendly title */}
       <Billboard position={[0, 3.0, 0]}>
         <Text
-          fontSize={0.46}               // slightly larger than before
+          fontSize={isSmall ? 0.40 : 0.46}
           color="white"
           anchorX="center"
           anchorY="middle"
-          outlineWidth={0.008}
+          outlineWidth={0.009}
           outlineColor="black"
+          maxWidth={6}
+          overflowWrap="break-word"
         >
           Software Engineer · Cloud & Data Enthusiast
         </Text>
