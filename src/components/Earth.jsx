@@ -5,7 +5,6 @@ import * as THREE from "three";
 
 const BASE = import.meta.env.BASE_URL; // e.g. "/portfolio-planet/" on GitHub Pages
 
-/** Animated Earth */
 function EarthSphere() {
   const ref = useRef();
   const [colorMap, bumpMap, specularMap] = useTexture([
@@ -15,13 +14,12 @@ function EarthSphere() {
   ]);
 
   useFrame((_, delta) => {
-    if (ref.current) ref.current.rotation.y += delta * 0.06; // gentle spin
+    if (ref.current) ref.current.rotation.y += delta * 0.06;
   });
 
   return (
     <mesh ref={ref}>
       <sphereGeometry args={[2, 64, 64]} />
-      {/* Phong responds nicely to specular highlights */}
       <meshPhongMaterial
         map={colorMap}
         bumpMap={bumpMap}
@@ -34,7 +32,6 @@ function EarthSphere() {
   );
 }
 
-/** Subtle atmosphere glow */
 function Atmosphere() {
   return (
     <mesh>
@@ -50,16 +47,7 @@ function Atmosphere() {
   );
 }
 
-/** Small labeled orb that orbits the Earth (optionally clickable) */
-function SkillOrb({
-  label,
-  url, // optional: open in new tab when clicked
-  radius = 3,
-  speed = 0.5,
-  offset = 0,
-  yAmplitude = 0.4,
-  color = "#38bdf8",
-}) {
+function SkillOrb({ label, url, radius = 3, speed = 0.5, offset = 0, yAmplitude = 0.4, color = "#38bdf8" }) {
   const ref = useRef();
   const { gl } = useThree();
 
@@ -105,18 +93,18 @@ function SkillOrb({
 }
 
 export default function Earth() {
-  // Map orbs to your repos
   const projectLinks = {
     AWS: "https://github.com/coolharry1976/smart-productivity-assistant",
     JavaScript: "https://github.com/coolharry1976/pokemon-search",
     SQL: "https://github.com/coolharry1976/weather-dashboard",
+    React: "https://github.com/coolharry1976/portfolio-planet"
   };
 
-  // Final curated set: Python, Java, C++, JavaScript, SQL, AWS
+  // 6 clean orbs including React (removed C++)
   const skills = [
     { label: "Python",     color: "#22c55e", radius: 3.1, speed: 0.50, offset: 0.0 },
     { label: "Java",       color: "#f59e0b", radius: 3.3, speed: 0.62, offset: 1.2 },
-    { label: "C++",        color: "#60a5fa", radius: 2.9, speed: 0.52, offset: 2.4 },
+    { label: "React",      color: "#06b6d4", radius: 3.0, speed: 0.58, offset: 2.4, url: projectLinks.React },
     { label: "JavaScript", color: "#eab308", radius: 3.2, speed: 0.55, offset: 3.6, url: projectLinks.JavaScript },
     { label: "SQL",        color: "#a78bfa", radius: 3.4, speed: 0.44, offset: 4.8, url: projectLinks.SQL },
     { label: "AWS",        color: "#f97316", radius: 3.0, speed: 0.70, offset: 6.0, url: projectLinks.AWS },
@@ -129,18 +117,16 @@ export default function Earth() {
       gl={{ toneMapping: THREE.ACESFilmicToneMapping }}
       onCreated={({ gl }) => { gl.toneMappingExposure = 1.25; }}
     >
-      {/* brighter lighting */}
       <ambientLight intensity={0.55} />
       <hemisphereLight skyColor={"#88caff"} groundColor={"#222"} intensity={0.35} />
       <directionalLight position={[5, 3, 5]} intensity={1.5} castShadow />
 
       <Stars radius={100} depth={50} count={5000} factor={4} />
 
-      {/* earth + effects */}
       <EarthSphere />
       <Atmosphere />
 
-      {/* name above earth (single source of truth for your name) */}
+      {/* Single source of truth for your name */}
       <Billboard position={[0, 3.0, 0]}>
         <Text
           fontSize={0.5}
@@ -154,7 +140,6 @@ export default function Earth() {
         </Text>
       </Billboard>
 
-      {/* orbiting skills (some clickable) */}
       {skills.map((s, i) => (
         <SkillOrb key={i} {...s} />
       ))}

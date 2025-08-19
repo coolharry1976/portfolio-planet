@@ -28,7 +28,7 @@ function ProjectCard({ title, desc, tech, github, demo, lightShot, darkShot }) {
   const imgSrc = (mode === "light" ? lightShot : darkShot) || PLACEHOLDER;
 
   return (
-    <div className="bg-zinc-900/60 rounded-2xl shadow-lg p-4 border border-zinc-800 hover:border-zinc-600 transition">
+    <article className="bg-zinc-900/60 rounded-2xl shadow-lg p-4 border border-zinc-800 hover:border-zinc-600 transition">
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-white text-xl font-semibold">{title}</h3>
         <div className="flex items-center gap-2 text-xs">
@@ -77,7 +77,7 @@ function ProjectCard({ title, desc, tech, github, demo, lightShot, darkShot }) {
           View on GitHub
         </a>
       </div>
-    </div>
+    </article>
   );
 }
 
@@ -107,8 +107,8 @@ export default function Projects() {
       tech: "AWS Lambda • API Gateway • DynamoDB • S3",
       github: "https://github.com/coolharry1976/smart-productivity-assistant",
       demo: null,
-      lightShot: `${BASE}screenshots/spa-light.png`, // add later
-      darkShot:  `${BASE}screenshots/spa-dark.png`,  // add later
+      lightShot: `${BASE}screenshots/spa-light.png`,  // add later
+      darkShot:  `${BASE}screenshots/spa-dark.png`,   // add later
     },
   ];
 

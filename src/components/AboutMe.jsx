@@ -1,28 +1,30 @@
-function AboutMe() {
+import React from "react";
+
+export default function AboutMe() {
   return (
-    <section id="about" className="p-10 bg-gray-900 text-white">
-      <h2 className="text-3xl font-bold mb-4">About Me</h2>
-      <p className="text-lg leading-relaxed max-w-3xl">
-        I’m <span className="font-semibold">Desmond Harry Adebowale</span>, 
-        a driven computer science graduate with a strong foundation in 
-        programming, cloud computing, and data visualization. 
-        I’ve built and deployed applications using AWS (Lambda, API Gateway, DynamoDB, S3), 
-        SQL, Python, and JavaScript, while also exploring front-end and back-end development. 
-        <br /><br />
-        My journey includes hands-on experience as a Computer Science Intern at Jenzabar, 
-        supporting IT-related tickets, working with SQL, Java, and C++ projects, 
-        and learning software development workflows. I’ve also contributed as a 
-        Resident Assistant at NCTC, gaining leadership and problem-solving skills 
-        while supporting a diverse student community.
-        <br /><br />
-        With certifications in responsive web design and JavaScript algorithms, 
-        I’m eager to keep learning and contribute to a growth-focused company 
-        in software engineering or data roles. I value teamwork, adaptability, 
-        and continuous growth while delivering solutions that improve efficiency 
-        and business outcomes.
-      </p>
+    <section id="about" className="py-20 px-6 bg-gray-900 text-white">
+      <div className="max-w-4xl mx-auto text-center">
+        <h2 className="text-4xl font-bold mb-6">About Me</h2>
+        <p className="text-lg leading-relaxed mb-8">
+          I’m <span className="font-semibold">Desmond Harry Adebowale</span>, a driven
+          Computer Science graduate with a strong background in programming,
+          cloud computing, and data visualization. I’ve gained experience
+          building and deploying applications using AWS, SQL, Python, and
+          JavaScript. My past roles have strengthened my problem-solving,
+          teamwork, and technical skills, and I’m eager to continue growing in
+          an entry-level Software or Data role where I can make an impact.
+        </p>
+
+        {/* Resume Button */}
+        <a
+          href="/resume/Desmond_Harry_Adebowale_Resume.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="px-6 py-3 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 transition"
+        >
+          📄 Download Resume
+        </a>
+      </div>
     </section>
   );
 }
-
-export default AboutMe;
