@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 
-export default function Contact() {
+export default function Contact({ isPaper = true }) {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
-  const isPaper = document.documentElement.getAttribute("data-theme") === "paper";
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -13,7 +12,6 @@ export default function Contact() {
 
   const outer = isPaper ? "py-20 px-6 bg-zinc-100 text-zinc-900" : "py-20 px-6 bg-zinc-900 text-white";
   const card  = isPaper ? "bg-white rounded-2xl shadow-xl ring-1 ring-zinc-200 p-8 md:p-10" : "bg-zinc-900/60 rounded-2xl shadow-lg ring-1 ring-white/10 p-8 md:p-10";
-  const label = isPaper ? "text-zinc-900" : "text-white";
   const input = isPaper ? "w-full bg-white border border-zinc-300 rounded-lg p-3 text-zinc-900" : "w-full bg-zinc-900/70 border border-zinc-800 rounded-lg p-3 text-white";
 
   return (

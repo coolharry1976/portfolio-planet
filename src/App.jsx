@@ -8,7 +8,15 @@ const Projects = lazy(() => import("./components/Projects"));
 
 export default function App() {
   const [active, setActive] = useState("about");
+  const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "space");
 
+  // Keep DOM attribute + localStorage in sync
+  useEffect(() => {
+    localStorage.setItem("theme", theme);
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [theme]);
+
+  // Scrollspy
   useEffect(() => {
     const sections = Array.from(document.querySelectorAll("main section[id]"));
     const obs = new IntersectionObserver((entries) => {
@@ -35,6 +43,8 @@ export default function App() {
     </button>
   );
 
+  const isPaper = theme === "paper";
+
   return (
     <div className="w-screen min-h-screen bg-black relative text-white">
       {/* HERO */}
@@ -46,7 +56,7 @@ export default function App() {
             {navBtn("projects","Projects")}
             {navBtn("contact","Contact")}
             <div className="mx-1 opacity-60">|</div>
-            <ThemeToggle />
+            <ThemeToggle theme={theme} setTheme={setTheme} />
           </nav>
         </header>
         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-center text-white/80 text-sm">
@@ -56,13 +66,13 @@ export default function App() {
 
       {/* CONTENT */}
       <main>
-        <section id="about"><AboutMe /></section>
+        <section id="about"><AboutMe isPaper={isPaper} /></section>
         <section id="projects">
           <Suspense fallback={<div className="px-4 py-16 text-center text-white/70">Loading projects…</div>}>
             <Projects />
           </Suspense>
         </section>
-        <section id="contact"><Contact /></section>
+        <section id="contact"><Contact isPaper={isPaper} /></section>
       </main>
     </div>
   );
