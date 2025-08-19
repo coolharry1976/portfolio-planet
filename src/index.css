@@ -2,7 +2,4 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Smooth scrolling for in-page nav */
-html {
-  scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }

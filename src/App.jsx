@@ -10,13 +10,11 @@ export default function App() {
   const [active, setActive] = useState("about");
   const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "space");
 
-  // Keep DOM attribute + localStorage in sync
   useEffect(() => {
     localStorage.setItem("theme", theme);
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
 
-  // Scrollspy
   useEffect(() => {
     const sections = Array.from(document.querySelectorAll("main section[id]"));
     const obs = new IntersectionObserver((entries) => {

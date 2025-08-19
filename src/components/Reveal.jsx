@@ -1,4 +1,3 @@
-// Reveal.jsx
 import React from "react";
 import useInView from "../hooks/useInView";
 export default function Reveal({ children }) {

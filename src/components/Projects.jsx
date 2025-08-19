@@ -7,7 +7,7 @@ const PLACEHOLDER =
   "data:image/svg+xml;utf8," +
   encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='675'><rect width='1200' height='675' fill='#0b1220'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='34' fill='#e5e7eb'>Screenshot coming soon</text></svg>`);
 
-function ProjectCard({ title, desc, tech, github, demo, lightShot, darkShot }) {
+function ProjectCard({ title, desc, tech, github, demo, lightShot, darkShot, bullets }) {
   const [mode, setMode] = useState("light");
   const imgSrc = (mode === "light" ? lightShot : darkShot) || PLACEHOLDER;
 
@@ -29,6 +29,12 @@ function ProjectCard({ title, desc, tech, github, demo, lightShot, darkShot }) {
       <p className="text-zinc-300 mt-3 text-sm leading-relaxed">{desc}</p>
       <div className="mt-2 text-zinc-400 text-xs">{tech}</div>
 
+      {bullets?.length > 0 && (
+        <ul className="mt-3 text-zinc-300 text-sm list-disc list-inside space-y-1">
+          {bullets.map((b) => <li key={b}>{b}</li>)}
+        </ul>
+      )}
+
       <div className="mt-4 flex gap-3">
         {demo && <a href={demo} target="_blank" rel="noreferrer" className="px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm">Live Demo</a>}
         <a href={github} target="_blank" rel="noreferrer" className="px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm">View on GitHub</a>
@@ -47,6 +53,10 @@ export default function Projects() {
       demo: null,
       lightShot: `${BASE}screenshots/pokemon-light.png`,
       darkShot:  `${BASE}screenshots/pokemon-dark.png`,
+      bullets: [
+        "Search latency under 100ms with cached responses",
+        "Mobile-first UI; keyboard navigation"
+      ],
     },
     {
       title: "Weather Dashboard",
@@ -56,6 +66,10 @@ export default function Projects() {
       demo: null,
       lightShot: `${BASE}screenshots/weather-light.png`,
       darkShot:  `${BASE}screenshots/weather-dark.png`,
+      bullets: [
+        "7-day forecasts with charts",
+        "SQLite persistence; simple REST design"
+      ],
     },
     {
       title: "Smart Productivity Assistant",
@@ -65,6 +79,10 @@ export default function Projects() {
       demo: null,
       lightShot: `${BASE}screenshots/spa-light.png`,
       darkShot:  `${BASE}screenshots/spa-dark.png`,
+      bullets: [
+        "REST endpoints via API Gateway",
+        "DynamoDB data model for tasks"
+      ],
     },
   ];
 

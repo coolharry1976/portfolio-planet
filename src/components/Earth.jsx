@@ -109,7 +109,7 @@ export default function Earth() {
     { label: "AWS",        color: "#f97316", radius: 3.0, speed: 0.70, offset: 6.0, url: projectLinks.AWS },
   ];
 
-  /* brighter lighting */
+  /* Brighter lighting + mobile perf */
   const Sun = () => {
     const light = useRef();
     useFrame(({ clock }) => {
@@ -121,18 +121,21 @@ export default function Earth() {
   };
   const Fill = () => <pointLight position={[-6, -2, -3]} intensity={0.4} color={"#a6d0ff"} />;
 
+  const isSmall = typeof window !== "undefined" && window.innerWidth < 640;
+
   return (
     <Canvas
       camera={{ position: [0, 0, 6] }}
       className="cursor-grab"
-      gl={{ toneMapping: THREE.ACESFilmicToneMapping }}
+      gl={{ toneMapping: THREE.ACESFilmicToneMapping, antialias: true, powerPreference: "high-performance" }}
+      dpr={[1, 1.75]}   // cap DPR for mobile
       onCreated={({ gl }) => { gl.toneMappingExposure = 1.45; }}
     >
       <ambientLight intensity={0.65} />
       <hemisphereLight skyColor={"#9ad1ff"} groundColor={"#222"} intensity={0.4} />
       <Sun />
       <Fill />
-      <Stars radius={100} depth={50} count={5000} factor={4} />
+      <Stars radius={100} depth={50} count={isSmall ? 800 : 5000} factor={3.5} />
 
       <EarthSphere />
       <Clouds />
