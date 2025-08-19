@@ -109,7 +109,7 @@ export default function Earth() {
     { label: "AWS",        color: "#f97316", radius: 3.0, speed: 0.70, offset: 6.0, url: projectLinks.AWS },
   ];
 
-  /* Brighter lighting + mobile perf */
+  /* brighter lighting + mobile perf caps */
   const Sun = () => {
     const light = useRef();
     useFrame(({ clock }) => {
@@ -128,7 +128,7 @@ export default function Earth() {
       camera={{ position: [0, 0, 6] }}
       className="cursor-grab"
       gl={{ toneMapping: THREE.ACESFilmicToneMapping, antialias: true, powerPreference: "high-performance" }}
-      dpr={[1, 1.75]}   // cap DPR for mobile
+      dpr={[1, 1.75]}
       onCreated={({ gl }) => { gl.toneMappingExposure = 1.45; }}
     >
       <ambientLight intensity={0.65} />
@@ -141,9 +141,17 @@ export default function Earth() {
       <Clouds />
       <Atmosphere />
 
+      {/* ---- UPDATED: concise, keyword-rich title instead of full name ---- */}
       <Billboard position={[0, 3.0, 0]}>
-        <Text fontSize={0.5} color="white" anchorX="center" anchorY="middle" outlineWidth={0.008} outlineColor="black">
-          Desmond Harry Adebowale
+        <Text
+          fontSize={0.46}               // slightly larger than before
+          color="white"
+          anchorX="center"
+          anchorY="middle"
+          outlineWidth={0.008}
+          outlineColor="black"
+        >
+          Software Engineer · Cloud & Data Enthusiast
         </Text>
       </Billboard>
 

@@ -5,27 +5,29 @@ import Contact from "./components/Contact";
 import ThemeToggle from "./components/ThemeToggle";
 
 const Projects = lazy(() => import("./components/Projects"));
-const BASE = import.meta.env.BASE_URL;
 
 export default function App() {
   const [active, setActive] = useState("about");
   const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "space");
 
-  // persist theme
+  // Persist theme + reflect on <html>
   useEffect(() => {
     localStorage.setItem("theme", theme);
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
 
-  // scrollspy
+  // Scrollspy for nav highlighting
   useEffect(() => {
     const sections = Array.from(document.querySelectorAll("main section[id]"));
-    const obs = new IntersectionObserver((entries) => {
-      const vis = entries
-        .filter((e) => e.isIntersecting)
-        .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-      if (vis[0]) setActive(vis[0].target.id);
-    }, { rootMargin: "-30% 0px -60% 0px", threshold: [0, 0.25, 0.5, 0.75, 1] });
+    const obs = new IntersectionObserver(
+      (entries) => {
+        const vis = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        if (vis[0]) setActive(vis[0].target.id);
+      },
+      { rootMargin: "-30% 0px -60% 0px", threshold: [0, 0.25, 0.5, 0.75, 1] }
+    );
     sections.forEach((s) => obs.observe(s));
     return () => obs.disconnect();
   }, []);
@@ -52,9 +54,8 @@ export default function App() {
 
   return (
     <div className="w-screen min-h-screen bg-black relative text-white">
-      {/* HERO — Earth background + overlay content */}
+      {/* HERO — Earth full screen, minimal UI */}
       <div className="relative h-screen">
-        {/* Earth renders as the background visual */}
         <Earth />
 
         {/* Top nav over hero */}
@@ -68,52 +69,17 @@ export default function App() {
           </nav>
         </header>
 
-        {/* Soft gradient overlay for text legibility */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-black/60 pointer-events-none" />
-
-        {/* Hero text + CTAs */}
-        <div className="absolute inset-0 z-10 flex items-center">
-          <div className="max-w-6xl mx-auto px-6">
-            <h1 className="text-4xl md:text-6xl font-extrabold leading-tight">
-              Desmond Harry Adebowale
-            </h1>
-            <p className="mt-3 text-lg md:text-xl text-white/90 max-w-2xl">
-              Software Engineer • Java · Python · React · SQL · AWS
-            </p>
-
-            <div className="mt-6 flex flex-wrap gap-3">
-              <button
-                onClick={() => scrollTo("#projects")}
-                className="px-5 py-3 rounded-lg bg-white text-black font-medium hover:bg-white/90 transition"
-              >
-                🔍 View Projects
-              </button>
-              <a
-                href={`${BASE}resume/Desmond_Harry_Adebowale_Resume.pdf`}
-                target="_blank"
-                rel="noreferrer"
-                className="px-5 py-3 rounded-lg bg-white/10 hover:bg-white/20 text-white font-medium transition"
-              >
-                📄 Download Resume
-              </a>
-              <button
-                onClick={() => scrollTo("#contact")}
-                className="px-5 py-3 rounded-lg bg-white/10 hover:bg-white/20 text-white font-medium transition"
-              >
-                ✉️ Get in Touch
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Scroll indicator */}
+        {/* Bigger, clearer scroll cue */}
         <button
           onClick={() => scrollTo("#about")}
-          className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center text-white/80 hover:text-white transition"
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20
+                     flex items-center gap-2 px-4 py-2 rounded-full
+                     bg-white/10 hover:bg-white/20 border border-white/20
+                     text-white/90 hover:text-white text-base md:text-lg transition"
           aria-label="Scroll down"
         >
-          <span className="text-sm mb-1">Scroll</span>
-          <span className="animate-bounce text-2xl">↓</span>
+          <span>Scroll</span>
+          <span className="animate-bounce text-2xl md:text-3xl leading-none">↓</span>
         </button>
       </div>
 
