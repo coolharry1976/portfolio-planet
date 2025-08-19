@@ -44,14 +44,16 @@ export default function App() {
     if (el) el.scrollIntoView({ behavior: "smooth" });
   };
 
-  const navBtn = (id, label) => (
+  const navBtn = (id, labelSmall, labelLarge) => (
     <button
       onClick={() => scrollTo(`#${id}`)}
-      className={`px-3 py-2 md:py-1 rounded-full text-sm md:text-base transition ${
+      className={`px-2.5 py-1.5 md:px-3 md:py-1 rounded-full text-xs md:text-sm transition whitespace-nowrap ${
         active===id ? "bg-white text-black" : "text-white/85 hover:text-white bg-white/10 hover:bg-white/20"
       }`}
     >
-      {label}
+      {/* show shorter label on small screens */}
+      <span className="md:hidden">{labelSmall}</span>
+      <span className="hidden md:inline">{labelLarge ?? labelSmall}</span>
     </button>
   );
 
@@ -59,29 +61,42 @@ export default function App() {
   const BrandChip = () => (
     <a
       href="#about"
-      className="group inline-flex items-center gap-2 md:gap-3 bg-black/35 backdrop-blur-sm border border-white/10 rounded-full pl-2.5 md:pl-3 pr-3 md:pr-4 py-1.5 md:py-2 max-w-[70vw] sm:max-w-none"
+      className="group inline-flex items-center gap-2 md:gap-3 bg-black/35 backdrop-blur-sm border border-white/10 rounded-full pl-2.5 md:pl-3 pr-3 md:pr-4 py-1.5 md:py-2 min-w-0 max-w-[58vw] sm:max-w-none shrink"
       aria-label="Go to About section"
     >
       <span
         className="text-white leading-none text-xs sm:text-sm md:text-base truncate"
-        style={{ fontFamily: "'Space Grotesk', system-ui, -apple-system, Segoe UI, Roboto, sans-serif" }}
+        style={{ fontFamily: "'Space Grotesk', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif" }}
       >
         <span className="font-bold tracking-wide">Desmond Harry Adebowale</span>
         <span className="hidden sm:inline text-white/70"> · Software Engineer</span>
       </span>
-      <span className="text-[9px] sm:text-[10px] md:text-xs px-2 py-[3px] rounded-full border border-white/15 text-white/90 bg-white/10 uppercase tracking-wider">
+      <span className="text-[9px] sm:text-[10px] md:text-xs px-2 py-[3px] rounded-full border border-white/15 text-white/90 bg-white/10 uppercase tracking-wider whitespace-nowrap">
         Portfolio
       </span>
     </a>
   );
 
+  // Tiny icon theme toggle for mobile
+  const MiniThemeToggle = () => (
+    <button
+      onClick={() => setTheme(theme === "space" ? "paper" : "space")}
+      className="md:hidden px-2 py-1 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 text-base"
+      aria-label="Toggle theme"
+      title="Toggle theme"
+    >
+      {theme === "space" ? "☀️" : "🌑"}
+    </button>
+  );
+
   const HeaderNav = () => (
-    <nav className="flex items-center gap-1.5 md:gap-2 bg-black/30 backdrop-blur-sm px-2.5 md:px-3 py-1.5 md:py-2 rounded-full border border-white/10">
+    <nav className="flex items-center gap-1.5 md:gap-2 bg-black/30 backdrop-blur-sm px-2 md:px-3 py-1.5 md:py-2 rounded-full border border-white/10">
       {navBtn("about","About")}
-      {navBtn("projects","Projects")}
+      {navBtn("projects","Work","Projects")}
       {navBtn("contact","Contact")}
-      <div className="hidden md:block mx-1 opacity-60">|</div>
-      <div className="ml-0.5 md:ml-0">
+      {/* Mobile: tiny icon toggle; Desktop: full toggle with text */}
+      <MiniThemeToggle />
+      <div className="hidden md:block">
         <ThemeToggle theme={theme} setTheme={setTheme} />
       </div>
     </nav>
@@ -98,7 +113,7 @@ export default function App() {
 
         {/* Over-hero header */}
         <header className="absolute top-0 left-0 w-full z-20">
-          <div className="max-w-6xl mx-auto px-3 md:px-4 py-2 md:py-3 flex items-center justify-between">
+          <div className="max-w-6xl mx-auto px-3 md:px-4 py-2 md:py-3 flex items-center justify-between gap-2">
             <BrandChip />
             <HeaderNav />
           </div>
@@ -126,7 +141,7 @@ export default function App() {
         aria-hidden={!stuck}
       >
         <div className="max-w-6xl mx-auto px-3 md:px-4 py-2">
-          <div className="flex items-center justify-between bg-black/55 backdrop-blur-md border border-white/10 rounded-full px-2.5 md:px-3 py-1.5 md:py-2">
+          <div className="flex items-center justify-between bg-black/55 backdrop-blur-md border border-white/10 rounded-full px-2 md:px-3 py-1.5 md:py-2 gap-2">
             <BrandChip />
             <HeaderNav />
           </div>
