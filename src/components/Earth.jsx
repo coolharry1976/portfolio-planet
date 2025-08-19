@@ -13,9 +13,7 @@ function EarthSphere() {
     `${BASE}textures/earth_bump.jpg`,
     `${BASE}textures/earth_specular.jpg`,
   ]);
-
-  useFrame((_, d) => ref.current && (ref.current.rotation.y += d * 0.06));
-
+  useFrame((_, d) => { if (ref.current) ref.current.rotation.y += d * 0.06; });
   return (
     <mesh ref={ref}>
       <sphereGeometry args={[2, 64, 64]} />
@@ -47,10 +45,10 @@ function Atmosphere() {
   );
 }
 
-/** Very light cloud shell (no texture needed) */
+/** Very light cloud shell (no texture) */
 function Clouds() {
   const ref = useRef();
-  useFrame((_, d) => ref.current && (ref.current.rotation.y -= d * 0.01));
+  useFrame((_, d) => { if (ref.current) ref.current.rotation.y -= d * 0.01; });
   return (
     <mesh ref={ref}>
       <sphereGeometry args={[2.05, 64, 64]} />
@@ -68,8 +66,10 @@ function SkillOrb({ label, url, radius=3, speed=0.5, offset=0, yAmp=0.4, color="
     const x = Math.cos(t) * radius;
     const z = Math.sin(t) * radius;
     const y = Math.sin(t * 0.75) * yAmp;
-    ref.current.position.set(x, y, z);
-    ref.current.rotation.y += 0.02;
+    if (ref.current) {
+      ref.current.position.set(x, y, z);
+      ref.current.rotation.y += 0.02;
+    }
   });
   const clickable = !!url;
   return (
@@ -109,10 +109,6 @@ export default function Earth() {
     { label: "AWS",        color: "#f97316", radius: 3.0, speed: 0.70, offset: 6.0, url: projectLinks.AWS },
   ];
 
-  // Reduced motion?
-  const prefersReduced = typeof window !== "undefined" &&
-    window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
   const Sun = () => {
     const light = useRef();
     useFrame(({ clock }) => {
@@ -122,6 +118,9 @@ export default function Earth() {
     });
     return <directionalLight ref={light} intensity={1.6} castShadow />;
   };
+
+  const prefersReduced = typeof window !== "undefined" &&
+    window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   return (
     <Canvas

@@ -26,7 +26,9 @@ export default function App() {
   const navBtn = (id, label) => (
     <button
       onClick={() => scrollTo(`#${id}`)}
-      className={`px-3 py-1 rounded-full ${active===id ? "bg-white/20 text-white" : "text-white/85 hover:text-white"}`}
+      className={`px-3 py-1 rounded-full transition ${
+        active===id ? "bg-white text-black" : "text-white/85 hover:text-white bg-white/10 hover:bg-white/20"
+      }`}
     >
       {label}
     </button>
