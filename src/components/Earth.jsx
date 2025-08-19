@@ -13,7 +13,6 @@ function EarthSphere() {
     `${BASE}textures/earth_bump.jpg`,
     `${BASE}textures/earth_specular.jpg`,
   ]);
-  // Lower segment detail on very small screens for perf
   const small = typeof window !== "undefined" && window.innerWidth < 380;
   useFrame((_, d) => { if (ref.current) ref.current.rotation.y += d * 0.06; });
   return (
@@ -39,7 +38,7 @@ function Atmosphere() {
       <meshBasicMaterial
         color={"#7cc3ff"}
         transparent
-        opacity={0.18} // slightly higher for legibility on phones
+        opacity={0.18}
         blending={THREE.AdditiveBlending}
         side={THREE.BackSide}
       />
@@ -47,7 +46,7 @@ function Atmosphere() {
   );
 }
 
-/* Clouds (no texture) */
+/* Clouds */
 function Clouds() {
   const ref = useRef();
   useFrame((_, d) => { if (ref.current) ref.current.rotation.y -= d * 0.01; });
@@ -111,7 +110,7 @@ export default function Earth() {
     { label: "AWS",        color: "#f97316", radius: 2.9,  speed: 0.68, offset: 6.0, url: projectLinks.AWS },
   ];
 
-  // brighter + mobile perf
+  // Lighting + perf caps
   const Sun = () => {
     const light = useRef();
     useFrame(({ clock }) => {
@@ -130,8 +129,8 @@ export default function Earth() {
       camera={{ position: [0, 0, 6] }}
       className="cursor-grab"
       gl={{ toneMapping: THREE.ACESFilmicToneMapping, antialias: true, powerPreference: "high-performance" }}
-      dpr={[1, 1.6]} // slightly lower cap on phones for smoother FPS
-      onCreated={({ gl }) => { gl.toneMappingExposure = 1.48; }} // a hair brighter
+      dpr={[1, 1.6]}
+      onCreated={({ gl }) => { gl.toneMappingExposure = 1.48; }}
     >
       <ambientLight intensity={0.68} />
       <hemisphereLight skyColor={"#9ad1ff"} groundColor={"#222"} intensity={0.42} />
@@ -143,16 +142,16 @@ export default function Earth() {
       <Clouds />
       <Atmosphere />
 
-      {/* Concise recruiter-friendly title */}
+      {/* Smaller floating title on phones */}
       <Billboard position={[0, 3.0, 0]}>
         <Text
-          fontSize={isSmall ? 0.40 : 0.46}
+          fontSize={isSmall ? 0.36 : 0.46}
           color="white"
           anchorX="center"
           anchorY="middle"
           outlineWidth={0.009}
           outlineColor="black"
-          maxWidth={6}
+          maxWidth={5.8}
           overflowWrap="break-word"
         >
           Software Engineer · Cloud & Data Enthusiast

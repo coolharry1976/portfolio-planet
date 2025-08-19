@@ -2,11 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-html { scroll-behavior: smooth; }
-/* Global font fallback chain */
+/* Global font — force it so mobile actually uses it */
 :root {
   --display: 'Space Grotesk', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
 }
 html, body {
-  font-family: var(--display);
+  font-family: var(--display) !important;
 }
+
+html { scroll-behavior: smooth; }

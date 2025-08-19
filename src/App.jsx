@@ -9,7 +9,7 @@ const Projects = lazy(() => import("./components/Projects"));
 export default function App() {
   const [active, setActive] = useState("about");
   const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "space");
-  const [stuck, setStuck] = useState(false); // sticky header after scroll
+  const [stuck, setStuck] = useState(false);
 
   // Persist theme + reflect on <html>
   useEffect(() => {
@@ -17,26 +17,21 @@ export default function App() {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
 
-  // Scrollspy for nav highlighting
+  // Scrollspy
   useEffect(() => {
     const sections = Array.from(document.querySelectorAll("main section[id]"));
-    const obs = new IntersectionObserver(
-      (entries) => {
-        const vis = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-        if (vis[0]) setActive(vis[0].target.id);
-      },
-      { rootMargin: "-30% 0px -60% 0px", threshold: [0, 0.25, 0.5, 0.75, 1] }
-    );
-    sections.forEach((s) => obs.observe(s));
+    const obs = new IntersectionObserver((entries) => {
+      const vis = entries.filter(e => e.isIntersecting).sort((a,b)=> b.intersectionRatio - a.intersectionRatio);
+      if (vis[0]) setActive(vis[0].target.id);
+    }, { rootMargin: "-30% 0px -60% 0px", threshold: [0,0.25,0.5,0.75,1] });
+    sections.forEach(s => obs.observe(s));
     return () => obs.disconnect();
   }, []);
 
-  // Sticky header trigger (after ~60% of hero)
+  // Sticky header trigger
   useEffect(() => {
     const onScroll = () => {
-      const threshold = Math.max(320, window.innerHeight * 0.6);
+      const threshold = Math.max(300, window.innerHeight * 0.6);
       setStuck(window.scrollY > threshold);
     };
     onScroll();
@@ -53,30 +48,28 @@ export default function App() {
     <button
       onClick={() => scrollTo(`#${id}`)}
       className={`px-3 py-2 md:py-1 rounded-full text-sm md:text-base transition ${
-        active === id
-          ? "bg-white text-black"
-          : "text-white/85 hover:text-white bg-white/10 hover:bg-white/20"
+        active===id ? "bg-white text-black" : "text-white/85 hover:text-white bg-white/10 hover:bg-white/20"
       }`}
     >
       {label}
     </button>
   );
 
-  // === BrandChip & HeaderNav ==========================================
+  // ===== Brand & Nav (mobile-tuned) ===================================
   const BrandChip = () => (
     <a
       href="#about"
-      className="group inline-flex items-center gap-2 md:gap-3 bg-black/35 backdrop-blur-sm border border-white/10 rounded-full pl-2.5 md:pl-3 pr-3 md:pr-4 py-2"
+      className="group inline-flex items-center gap-2 md:gap-3 bg-black/35 backdrop-blur-sm border border-white/10 rounded-full pl-2.5 md:pl-3 pr-3 md:pr-4 py-1.5 md:py-2 max-w-[70vw] sm:max-w-none"
       aria-label="Go to About section"
     >
       <span
-        className="text-white leading-none text-sm md:text-base"
+        className="text-white leading-none text-xs sm:text-sm md:text-base truncate"
         style={{ fontFamily: "'Space Grotesk', system-ui, -apple-system, Segoe UI, Roboto, sans-serif" }}
       >
         <span className="font-bold tracking-wide">Desmond Harry Adebowale</span>
         <span className="hidden sm:inline text-white/70"> · Software Engineer</span>
       </span>
-      <span className="text-[10px] md:text-xs px-2 py-0.5 rounded-full border border-white/15 text-white/85 bg-white/5 uppercase tracking-wider">
+      <span className="text-[9px] sm:text-[10px] md:text-xs px-2 py-[3px] rounded-full border border-white/15 text-white/90 bg-white/10 uppercase tracking-wider">
         Portfolio
       </span>
     </a>
@@ -84,9 +77,9 @@ export default function App() {
 
   const HeaderNav = () => (
     <nav className="flex items-center gap-1.5 md:gap-2 bg-black/30 backdrop-blur-sm px-2.5 md:px-3 py-1.5 md:py-2 rounded-full border border-white/10">
-      {navBtn("about", "About")}
-      {navBtn("projects", "Projects")}
-      {navBtn("contact", "Contact")}
+      {navBtn("about","About")}
+      {navBtn("projects","Projects")}
+      {navBtn("contact","Contact")}
       <div className="hidden md:block mx-1 opacity-60">|</div>
       <div className="ml-0.5 md:ml-0">
         <ThemeToggle theme={theme} setTheme={setTheme} />
@@ -99,19 +92,19 @@ export default function App() {
 
   return (
     <div className="w-screen min-h-screen bg-black relative text-white">
-      {/* HERO — Earth full screen, minimal UI */}
+      {/* HERO */}
       <div className="relative h-screen">
         <Earth />
 
-        {/* Top header over hero: brand + nav */}
+        {/* Over-hero header */}
         <header className="absolute top-0 left-0 w-full z-20">
-          <div className="max-w-6xl mx-auto px-3 md:px-4 py-2.5 md:py-3 flex items-center justify-between">
+          <div className="max-w-6xl mx-auto px-3 md:px-4 py-2 md:py-3 flex items-center justify-between">
             <BrandChip />
             <HeaderNav />
           </div>
         </header>
 
-        {/* Bigger, clearer scroll cue (larger tap target on mobile) */}
+        {/* Scroll cue (bigger tap target) */}
         <button
           onClick={() => scrollTo("#about")}
           className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20
@@ -125,7 +118,7 @@ export default function App() {
         </button>
       </div>
 
-      {/* Sticky header after you scroll past the hero */}
+      {/* Sticky header */}
       <div
         className={`fixed top-0 left-0 w-full z-30 transition-all duration-300 ${
           stuck ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4 pointer-events-none"
@@ -142,25 +135,13 @@ export default function App() {
 
       {/* CONTENT */}
       <main>
-        <section id="about">
-          <AboutMe isPaper={isPaper} />
-        </section>
-
+        <section id="about"><AboutMe isPaper={isPaper} /></section>
         <section id="projects">
-          <Suspense
-            fallback={
-              <div className="px-4 py-16 text-center text-white/70">
-                Loading projects…
-              </div>
-            }
-          >
+          <Suspense fallback={<div className="px-4 py-16 text-center text-white/70">Loading projects…</div>}>
             <Projects />
           </Suspense>
         </section>
-
-        <section id="contact">
-          <Contact isPaper={isPaper} />
-        </section>
+        <section id="contact"><Contact isPaper={isPaper} /></section>
       </main>
     </div>
   );
