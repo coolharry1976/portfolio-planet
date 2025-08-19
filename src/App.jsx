@@ -1,38 +1,44 @@
-import React from "react";
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls, Stars } from "@react-three/drei";
 import Earth from "./components/Earth";
+import AboutMe from "./components/AboutMe";
 import Projects from "./components/Projects";
+import Skills from "./components/Skills";
+import Contact from "./components/Contact";
 
-export default function App() {
-  const scrollToProjects = () => {
-    const el = document.querySelector("#projects");
-    if (el) el.scrollIntoView({ behavior: "smooth" });
-  };
-
+function App() {
   return (
-    <div className="w-screen min-h-screen bg-black relative">
-      {/* 3D hero */}
-      <div className="h-screen">
+    <div className="w-screen h-screen bg-black text-white">
+      {/* Planet Background */}
+      <Canvas camera={{ position: [0, 0, 4], fov: 60 }}>
+        <ambientLight intensity={0.6} />
+        <directionalLight position={[5, 5, 5]} intensity={1.5} />
+        <Stars />
         <Earth />
-        {/* top nav */}
-        <header className="absolute top-0 left-0 w-full p-4 flex items-center justify-between">
-          <div className="text-white font-semibold">Desmond H. Adebowale</div>
-          <nav className="flex gap-4">
-            <button onClick={scrollToProjects} className="text-white/80 hover:text-white">
-              Projects
-            </button>
-            <a href="https://www.linkedin.com/in/harry-adebowale" target="_blank" rel="noreferrer"
-               className="text-white/80 hover:text-white">LinkedIn</a>
-            <a href="mailto:harryadebowale@gmail.com" className="text-white/80 hover:text-white">Contact</a>
-          </nav>
-        </header>
+        <OrbitControls enableZoom={false} />
+      </Canvas>
 
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-center text-white/80 text-sm">
-          Drag to orbit • Zoom disabled for clarity
-        </div>
+      {/* Overlay */}
+      <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center pointer-events-none text-center">
+        <h1 className="text-4xl md:text-6xl font-bold mb-4">
+          Desmond Harry Adebowale
+        </h1>
+        <p className="text-lg md:text-xl max-w-2xl">
+          Hi, I’m Desmond — a computer science graduate passionate about software, cloud, 
+          and data-driven solutions. I build projects that simplify life and I’m eager to 
+          keep growing while making an impact in tech.
+        </p>
       </div>
 
-      {/* projects */}
-      <Projects />
+      {/* Sections */}
+      <div className="absolute top-0 left-0 w-full mt-[100vh] bg-gray-900">
+        <AboutMe />
+        <Projects />
+        <Skills />
+        <Contact />
+      </div>
     </div>
   );
 }
+
+export default App;

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 
-/** Simple placeholder (SVG) used if a screenshot file is missing */
+const BASE = import.meta.env.BASE_URL; // ensures correct paths on GitHub Pages
+
+// Fallback placeholder if a screenshot is missing
 const PLACEHOLDER =
   "data:image/svg+xml;utf8," +
   encodeURIComponent(`
@@ -21,10 +23,9 @@ const PLACEHOLDER =
       font-family='Arial, sans-serif' font-size='34' fill='#e5e7eb'>Screenshot coming soon</text>
   </svg>`);
 
-/** Card with light/dark screenshot toggle */
-function ProjectCard({ title, desc, tech, github, lightShot, darkShot }) {
+function ProjectCard({ title, desc, tech, github, demo, lightShot, darkShot }) {
   const [mode, setMode] = useState("light");
-  const currentSrc = (mode === "light" ? lightShot : darkShot) || PLACEHOLDER;
+  const imgSrc = (mode === "light" ? lightShot : darkShot) || PLACEHOLDER;
 
   return (
     <div className="bg-zinc-900/60 rounded-2xl shadow-lg p-4 border border-zinc-800 hover:border-zinc-600 transition">
@@ -46,7 +47,7 @@ function ProjectCard({ title, desc, tech, github, lightShot, darkShot }) {
 
       <div className="aspect-video w-full overflow-hidden rounded-xl ring-1 ring-zinc-800 bg-black">
         <img
-          src={currentSrc}
+          src={imgSrc}
           alt={`${title} ${mode} screenshot`}
           className="w-full h-full object-cover"
           onError={(e) => { e.currentTarget.src = PLACEHOLDER; }}
@@ -54,10 +55,19 @@ function ProjectCard({ title, desc, tech, github, lightShot, darkShot }) {
       </div>
 
       <p className="text-zinc-300 mt-3 text-sm leading-relaxed">{desc}</p>
-
       <div className="mt-2 text-zinc-400 text-xs">{tech}</div>
 
       <div className="mt-4 flex gap-3">
+        {demo && (
+          <a
+            href={demo}
+            target="_blank"
+            rel="noreferrer"
+            className="px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm"
+          >
+            Live Demo
+          </a>
+        )}
         <a
           href={github}
           target="_blank"
@@ -72,31 +82,33 @@ function ProjectCard({ title, desc, tech, github, lightShot, darkShot }) {
 }
 
 export default function Projects() {
-  // 👉 Update only the screenshot paths below after you add files to /public/screenshots/
   const items = [
     {
       title: "Pokémon Search App",
-      desc: "Java + HTML/CSS app with API integration for searching Pokémon with clean UI and fast lookup.",
+      desc: "Java + HTML/CSS app with REST API lookup, fast search, and clean UI.",
       tech: "Java • REST API • HTML/CSS",
       github: "https://github.com/coolharry1976/pokemon-search",
-      lightShot: "/screenshots/pokemon-light.png",
-      darkShot: "/screenshots/pokemon-dark.png",
+      demo: null, // add a deployed link later if you have one
+      lightShot: `${BASE}screenshots/pokemon-light.png`,
+      darkShot:  `${BASE}screenshots/pokemon-dark.png`,
     },
     {
       title: "Weather Dashboard",
-      desc: "Node/Express backend with SQLite and Chart.js for trend visualization; dark/light modes supported.",
+      desc: "Node/Express backend with SQLite and Chart.js visualizations; dark/light modes.",
       tech: "Node.js • Express • SQLite • Chart.js",
       github: "https://github.com/coolharry1976/weather-dashboard",
-      lightShot: "/screenshots/weather-light.png",
-      darkShot: "/screenshots/weather-dark.png",
+      demo: null,
+      lightShot: `${BASE}screenshots/weather-light.png`,
+      darkShot:  `${BASE}screenshots/weather-dark.png`,
     },
     {
       title: "Smart Productivity Assistant",
-      desc: "Serverless task manager built on AWS (Lambda, API Gateway, DynamoDB, S3). Auth + CRUD tasks.",
+      desc: "Serverless task manager using AWS Lambda, API Gateway, DynamoDB, and S3. CRUD tasks + roadmap.",
       tech: "AWS Lambda • API Gateway • DynamoDB • S3",
       github: "https://github.com/coolharry1976/smart-productivity-assistant",
-      lightShot: "/screenshots/spa-light.png",  // add later
-      darkShot: "/screenshots/spa-dark.png",    // add later
+      demo: null,
+      lightShot: `${BASE}screenshots/spa-light.png`, // add later
+      darkShot:  `${BASE}screenshots/spa-dark.png`,  // add later
     },
   ];
 
@@ -104,7 +116,7 @@ export default function Projects() {
     <section id="projects" className="max-w-6xl mx-auto px-4 py-16">
       <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">Projects</h2>
       <p className="text-zinc-300 mb-8">
-        A selection of work that shows my range across frontend, backend, cloud, and data.
+        A selection of work showing range across frontend, backend, cloud, and data.
       </p>
       <div className="grid md:grid-cols-2 gap-6">
         {items.map((p) => (

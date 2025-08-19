@@ -3,13 +3,15 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls, Stars, useTexture, Text, Billboard } from "@react-three/drei";
 import * as THREE from "three";
 
+const BASE = import.meta.env.BASE_URL; // e.g. "/portfolio-planet/" on GitHub Pages
+
 /** Animated Earth */
 function EarthSphere() {
   const ref = useRef();
   const [colorMap, bumpMap, specularMap] = useTexture([
-    "/textures/earth_daymap.jpg",
-    "/textures/earth_bump.jpg",
-    "/textures/earth_specular.jpg",
+    `${BASE}textures/earth_daymap.jpg`,
+    `${BASE}textures/earth_bump.jpg`,
+    `${BASE}textures/earth_specular.jpg`,
   ]);
 
   useFrame((_, delta) => {
@@ -19,13 +21,14 @@ function EarthSphere() {
   return (
     <mesh ref={ref}>
       <sphereGeometry args={[2, 64, 64]} />
+      {/* Phong responds nicely to specular highlights */}
       <meshPhongMaterial
         map={colorMap}
         bumpMap={bumpMap}
-        bumpScale={0.05}
+        bumpScale={0.06}
         specularMap={specularMap}
-        shininess={20}
-        specular={"#333"}
+        shininess={35}
+        specular={"#555"}
       />
     </mesh>
   );
@@ -37,9 +40,9 @@ function Atmosphere() {
     <mesh>
       <sphereGeometry args={[2.08, 64, 64]} />
       <meshBasicMaterial
-        color={"#60a5fa"}
+        color={"#7cc3ff"}
         transparent
-        opacity={0.18}
+        opacity={0.16}
         blending={THREE.AdditiveBlending}
         side={THREE.BackSide}
       />
@@ -82,7 +85,7 @@ function SkillOrb({
     >
       <mesh>
         <icosahedronGeometry args={[0.22, 0]} />
-        <meshStandardMaterial color={color} />
+        <meshStandardMaterial color={color} metalness={0.2} roughness={0.35} />
       </mesh>
 
       <Billboard position={[0, 0.55, 0]}>
@@ -102,7 +105,7 @@ function SkillOrb({
 }
 
 export default function Earth() {
-  // Map orbs to your repos (make some immediately useful)
+  // Map orbs to your repos
   const projectLinks = {
     AWS: "https://github.com/coolharry1976/smart-productivity-assistant",
     JavaScript: "https://github.com/coolharry1976/pokemon-search",
@@ -120,17 +123,24 @@ export default function Earth() {
   ];
 
   return (
-    <Canvas camera={{ position: [0, 0, 6] }} className="cursor-grab">
-      {/* lights + bg */}
-      <ambientLight intensity={0.35} />
-      <pointLight position={[10, 10, 10]} intensity={1.2} />
+    <Canvas
+      camera={{ position: [0, 0, 6] }}
+      className="cursor-grab"
+      gl={{ toneMapping: THREE.ACESFilmicToneMapping }}
+      onCreated={({ gl }) => { gl.toneMappingExposure = 1.25; }}
+    >
+      {/* brighter lighting */}
+      <ambientLight intensity={0.55} />
+      <hemisphereLight skyColor={"#88caff"} groundColor={"#222"} intensity={0.35} />
+      <directionalLight position={[5, 3, 5]} intensity={1.5} castShadow />
+
       <Stars radius={100} depth={50} count={5000} factor={4} />
 
       {/* earth + effects */}
       <EarthSphere />
       <Atmosphere />
 
-      {/* name above earth */}
+      {/* name above earth (single source of truth for your name) */}
       <Billboard position={[0, 3.0, 0]}>
         <Text
           fontSize={0.5}
