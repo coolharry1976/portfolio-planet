@@ -2,14 +2,11 @@ import React, { useEffect, useState } from "react";
 
 export default function ThemeToggle() {
   const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "space");
-
   useEffect(() => {
     localStorage.setItem("theme", theme);
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
-
   const next = theme === "space" ? "paper" : "space";
-
   return (
     <button
       onClick={() => setTheme(next)}

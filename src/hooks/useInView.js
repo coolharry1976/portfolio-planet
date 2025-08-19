@@ -1,5 +1,5 @@
+// useInView.js
 import { useEffect, useRef, useState } from "react";
-
 export default function useInView(options = { threshold: 0.15, rootMargin: "0px" }) {
   const ref = useRef(null);
   const [inView, setInView] = useState(false);

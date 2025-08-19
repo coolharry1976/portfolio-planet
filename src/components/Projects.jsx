@@ -5,38 +5,25 @@ const BASE = import.meta.env.BASE_URL;
 
 const PLACEHOLDER =
   "data:image/svg+xml;utf8," +
-  encodeURIComponent(`
-  <svg xmlns='http://www.w3.org/2000/svg' width='1200' height='675' viewBox='0 0 1200 675'>
-    <defs><linearGradient id='g' x1='0' x2='1' y1='0' y2='1'>
-      <stop offset='0%' stop-color='#0f172a'/><stop offset='100%' stop-color='#111827'/>
-    </linearGradient></defs>
-    <rect width='1200' height='675' fill='url(#g)'/>
-    <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle'
-      font-family='Arial, sans-serif' font-size='34' fill='#e5e7eb'>Screenshot coming soon</text>
-  </svg>`);
+  encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='675'><rect width='1200' height='675' fill='#0b1220'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='34' fill='#e5e7eb'>Screenshot coming soon</text></svg>`);
 
 function ProjectCard({ title, desc, tech, github, demo, lightShot, darkShot }) {
   const [mode, setMode] = useState("light");
   const imgSrc = (mode === "light" ? lightShot : darkShot) || PLACEHOLDER;
 
   return (
-    <article className="bg-zinc-900/60 rounded-2xl p-4 border border-zinc-800 transition
-                        hover:border-zinc-600 hover:shadow-[0_0_24px_rgba(255,255,255,.07)] hover:-translate-y-0.5">
+    <article className="bg-zinc-900/60 rounded-2xl p-4 border border-zinc-800 transition hover:border-zinc-600 hover:shadow-[0_0_24px_rgba(255,255,255,.07)] hover:-translate-y-0.5">
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-white text-xl font-semibold">{title}</h3>
         <div className="flex items-center gap-2 text-xs">
           <span className={`px-2 py-1 rounded ${mode==='light'?'bg-zinc-700 text-white':'bg-zinc-800 text-zinc-300'}`}>Light</span>
-          <button className="px-2 py-1 rounded bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
-            onClick={() => setMode(mode === "light" ? "dark" : "light")} aria-label="Toggle screenshot mode">
-            Toggle
-          </button>
+          <button className="px-2 py-1 rounded bg-zinc-800 text-zinc-300 hover:bg-zinc-700" onClick={() => setMode(mode === "light" ? "dark" : "light")} aria-label="Toggle screenshot mode">Toggle</button>
           <span className={`px-2 py-1 rounded ${mode==='dark'?'bg-zinc-700 text-white':'bg-zinc-800 text-zinc-300'}`}>Dark</span>
         </div>
       </div>
 
       <div className="aspect-video w-full overflow-hidden rounded-xl ring-1 ring-zinc-800 bg-black">
-        <img src={imgSrc} alt={`${title} ${mode} screenshot`} className="w-full h-full object-cover"
-             onError={(e) => { e.currentTarget.src = PLACEHOLDER; }} />
+        <img src={imgSrc} alt={`${title} ${mode} screenshot`} className="w-full h-full object-cover" onError={(e) => { e.currentTarget.src = PLACEHOLDER; }} />
       </div>
 
       <p className="text-zinc-300 mt-3 text-sm leading-relaxed">{desc}</p>
@@ -83,12 +70,8 @@ export default function Projects() {
 
   return (
     <section id="projects" className="max-w-6xl mx-auto px-4 py-16">
-      <Reveal>
-        <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">Projects</h2>
-      </Reveal>
-      <Reveal>
-        <p className="text-zinc-300 mb-8">A selection of work showing range across frontend, backend, cloud, and data.</p>
-      </Reveal>
+      <Reveal><h2 className="text-3xl md:text-4xl font-bold text-white mb-6">Projects</h2></Reveal>
+      <Reveal><p className="text-zinc-300 mb-8">A selection of work showing range across frontend, backend, cloud, and data.</p></Reveal>
       <div className="grid md:grid-cols-2 gap-6">
         {items.map((p) => (
           <Reveal key={p.title}><ProjectCard {...p} /></Reveal>
