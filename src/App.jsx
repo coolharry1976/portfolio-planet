@@ -62,7 +62,7 @@ export default function App() {
     </button>
   );
 
-  // Brand chip (mobile-conscious)
+  // === BrandChip & HeaderNav ==========================================
   const BrandChip = () => (
     <a
       href="#about"
@@ -93,6 +93,7 @@ export default function App() {
       </div>
     </nav>
   );
+  // ====================================================================
 
   const isPaper = theme === "paper";
 

@@ -3,3 +3,10 @@
 @tailwind utilities;
 
 html { scroll-behavior: smooth; }
+/* Global font fallback chain */
+:root {
+  --display: 'Space Grotesk', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+}
+html, body {
+  font-family: var(--display);
+}
