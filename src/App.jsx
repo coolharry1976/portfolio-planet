@@ -1,44 +1,54 @@
-import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Stars } from "@react-three/drei";
+import React from "react";
 import Earth from "./components/Earth";
-import AboutMe from "./components/AboutMe";
 import Projects from "./components/Projects";
-import Skills from "./components/Skills";
+import AboutMe from "./components/AboutMe";
 import Contact from "./components/Contact";
 
-function App() {
+export default function App() {
+  const scrollTo = (id) => {
+    const el = document.querySelector(id);
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
-    <div className="w-screen h-screen bg-black text-white">
-      {/* Planet Background */}
-      <Canvas camera={{ position: [0, 0, 4], fov: 60 }}>
-        <ambientLight intensity={0.6} />
-        <directionalLight position={[5, 5, 5]} intensity={1.5} />
-        <Stars />
+    <div className="w-screen min-h-screen bg-black relative text-white">
+      {/* HERO: full-screen 3D Earth */}
+      <div className="h-screen relative">
         <Earth />
-        <OrbitControls enableZoom={false} />
-      </Canvas>
 
-      {/* Overlay */}
-      <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center pointer-events-none text-center">
-        <h1 className="text-4xl md:text-6xl font-bold mb-4">
-          Desmond Harry Adebowale
-        </h1>
-        <p className="text-lg md:text-xl max-w-2xl">
-          Hi, I’m Desmond — a computer science graduate passionate about software, cloud, 
-          and data-driven solutions. I build projects that simplify life and I’m eager to 
-          keep growing while making an impact in tech.
-        </p>
+        {/* Minimal top nav (no name here to avoid duplication) */}
+        <header className="absolute top-0 left-0 w-full p-4 flex items-center justify-center">
+          <nav className="flex gap-6 bg-black/30 backdrop-blur-sm px-4 py-2 rounded-full border border-white/10">
+            <button onClick={() => scrollTo("#about")} className="text-white/85 hover:text-white">
+              About
+            </button>
+            <button onClick={() => scrollTo("#projects")} className="text-white/85 hover:text-white">
+              Projects
+            </button>
+            <button onClick={() => scrollTo("#contact")} className="text-white/85 hover:text-white">
+              Contact
+            </button>
+          </nav>
+        </header>
+
+        {/* Small helper text at bottom */}
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-center text-white/80 text-sm">
+          Drag to orbit • Zoom disabled for clarity
+        </div>
       </div>
 
-      {/* Sections */}
-      <div className="absolute top-0 left-0 w-full mt-[100vh] bg-gray-900">
-        <AboutMe />
-        <Projects />
-        <Skills />
-        <Contact />
-      </div>
+      {/* CONTENT SECTIONS */}
+      <main>
+        <section id="about">
+          <AboutMe />
+        </section>
+        <section id="projects">
+          <Projects />
+        </section>
+        <section id="contact">
+          <Contact />
+        </section>
+      </main>
     </div>
   );
 }
-
-export default App;
